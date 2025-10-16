@@ -1,0 +1,60 @@
+services:
+    laravel:
+        image: php:8.3-cli
+        container_name: blockchain_laravel
+        working_dir: /var/www/html
+        ports:
+            - "8001:8000"
+        volumes:
+            - ./backend:/var/www/html
+        environment:
+            - DB_CONNECTION=pgsql
+            - DB_HOST=postgres
+            - DB_PORT=5432
+            - DB_DATABASE=blockchain
+            - DB_USERNAME=blockchain_user
+            - DB_PASSWORD=blockchain_pass
+        depends_on:
+            - postgres
+        networks:
+            - blockchain_network
+        command:
+            - bash
+            - /var/www/html/docker-entrypoint.sh
+
+    postgres:
+        image: postgres:15-alpine
+        container_name: blockchain_postgres
+        ports:
+            - "5433:5432"
+        environment:
+            POSTGRES_DB: blockchain
+            POSTGRES_USER: blockchain_user
+            POSTGRES_PASSWORD: blockchain_pass
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - blockchain_network
+
+    react:
+        image: node:20-alpine
+        container_name: blockchain_react
+        working_dir: /app
+        ports:
+            - "3001:3000"
+        volumes:
+            - ./frontend:/app
+        environment:
+            - REACT_APP_API_URL=http://localhost:8001/api
+        networks:
+            - blockchain_network
+        command:
+            - sh
+            - /app/docker-entrypoint.sh
+
+volumes:
+    postgres_data:
+
+networks:
+    blockchain_network:
+        driver: bridge
