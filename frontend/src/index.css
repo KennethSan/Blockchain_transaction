@@ -2,17 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: dark;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f3f4f6;
+  background: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.25), transparent 60%),
+    linear-gradient(140deg, #080318 0%, #13042c 45%, #050211 100%);
+  color: #f4f5ff;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::before {
+  background-image: radial-gradient(1px 1px at 25px 25px, rgba(255, 255, 255, 0.35) 0, transparent 60%);
+  background-size: 140px 140px;
+  opacity: 0.35;
+}
+
+body::after {
+  background: radial-gradient(circle at 15% 75%, rgba(225, 29, 116, 0.45), transparent 60%);
+  filter: blur(120px);
+  opacity: 0.6;
+}
+
+a {
+  color: inherit;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Space Grotesk', 'Fira Code', 'Fira Mono', 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@layer components {
+  .glass-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(18, 11, 37, 0.65);
+    backdrop-filter: blur(24px);
+    transition: transform 0.8s ease, box-shadow 0.8s ease, border 0.8s ease;
+  }
+
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: -60% -40% auto -40%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(124, 58, 237, 0.35), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .glass-panel:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 110px -45px rgba(236, 72, 153, 0.6);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .glass-panel:hover::before {
+    opacity: 1;
+  }
+
+  .nebula-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(236, 72, 153, 0), rgba(236, 72, 153, 0.45), rgba(101, 101, 237, 0));
+  }
+
+  .glow-ring {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid rgba(236, 72, 153, 0.45);
+    filter: blur(0.5px);
+    opacity: 0.7;
+    pointer-events: none;
+  }
 }

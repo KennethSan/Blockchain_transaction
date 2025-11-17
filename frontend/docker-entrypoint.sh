@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -e
 
 cd /app
 
@@ -9,9 +9,10 @@ if [ ! -d node_modules ]; then
     npm install
 fi
 
-export HOST=0.0.0.0
+export HOST=::
 export PORT=3000
 export CHOKIDAR_USEPOLLING=1
 
-echo "[React] Starting development server on 0.0.0.0:3000"
+echo "[React] Starting development server on :::3000"
 exec npm start
+

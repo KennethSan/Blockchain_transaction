@@ -24,18 +24,24 @@ function Blocks() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Blockchain</h2>
-            <p className="text-gray-600">View all mined blocks in the chain</p>
+      <div className="glass-panel overflow-hidden px-8 py-10">
+        <span className="glow-ring" aria-hidden="true" />
+        <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/50">chain explorer</p>
+            <h2 className="font-heading text-4xl text-white md:text-5xl">
+              Trace the luminous path of every block.
+            </h2>
+            <p className="text-base text-white/70 md:text-lg">
+              Inspect hashes, follow nonce signatures, and watch the timeline shimmer as each block maintains integrity.
+            </p>
           </div>
           <button
             onClick={fetchBlocks}
             disabled={loading}
-            className="px-4 py-2 bg-blockchain-blue text-white rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400 font-medium"
+            className="rounded-full border border-white/20 px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white/80 transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? '🔄 Loading...' : '🔄 Refresh'}
           </button>
@@ -43,130 +49,124 @@ function Blocks() {
       </div>
 
       {/* Blocks Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-          <p className="text-sm font-medium text-blue-800 opacity-80">Total Blocks</p>
-          <p className="text-3xl font-bold text-blue-800 mt-2">{blocks.length}</p>
-        </div>
-        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-          <p className="text-sm font-medium text-green-800 opacity-80">Total Transactions</p>
-          <p className="text-3xl font-bold text-green-800 mt-2">
-            {blocks.reduce((sum, block) => sum + (block.transactions?.length || 0), 0)}
-          </p>
-        </div>
-        <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
-          <p className="text-sm font-medium text-purple-800 opacity-80">Longest Chain</p>
-          <p className="text-3xl font-bold text-purple-800 mt-2">
-            {blocks.length > 0 ? blocks[blocks.length - 1].index_no + 1 : 0}
-          </p>
-        </div>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <StatPanel
+          label="Total Blocks"
+          value={blocks.length}
+          gradient="linear-gradient(135deg, rgba(124,58,237,0.6), rgba(56,189,248,0.35))"
+        />
+        <StatPanel
+          label="Total Transactions"
+          value={blocks.reduce((sum, block) => sum + (block.transactions?.length || 0), 0)}
+          gradient="linear-gradient(135deg, rgba(236,72,153,0.6), rgba(250,204,21,0.35))"
+        />
+        <StatPanel
+          label="Longest Chain"
+          value={blocks.length > 0 ? blocks[blocks.length - 1].index_no + 1 : 0}
+          gradient="linear-gradient(135deg, rgba(59,130,246,0.6), rgba(16,185,129,0.35))"
+        />
       </div>
 
       {/* Blockchain Visualization */}
       {blocks.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <p className="text-6xl mb-4">⛓️</p>
-          <p className="text-xl text-gray-600 font-semibold">No blocks in the chain yet</p>
-          <p className="text-gray-500 mt-2">Mine your first block to get started!</p>
+        <div className="glass-panel flex flex-col items-center justify-center gap-4 px-10 py-16 text-center text-white/70">
+          <span className="text-6xl">⛓️</span>
+          <h3 className="text-2xl font-semibold text-white/80">No blocks in the chain yet</h3>
+          <p className="text-sm uppercase tracking-[0.35em] text-white/50">Mine your first block to illuminate the path.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-16">
           {blocks.map((block, index) => (
-            <div key={block.id}>
-              {/* Block Card */}
-              <div className="bg-white rounded-lg shadow-md p-6 border-2 border-blockchain-blue hover:shadow-xl transition">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-blockchain-blue text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">
-                      #{block.index_no}
+            <div key={block.id} className="space-y-10">
+              <div className="glass-panel overflow-hidden px-8 py-8 transition duration-700 hover:-translate-y-1">
+                <span className="glow-ring" aria-hidden="true" />
+                <div className="relative z-10 space-y-8">
+                  <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                    <div className="flex items-center gap-5">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-nebula-magenta via-nebula-purple to-nebula-cyan text-2xl font-heading text-white shadow-glow-sm">
+                        #{block.index_no}
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/50">block height</p>
+                        <h3 className="mt-2 font-heading text-3xl text-white">Block {block.index_no}</h3>
+                        <p className="mt-1 text-xs uppercase tracking-[0.35em] text-white/50">
+                          {new Date(block.timestamp).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-800">
-                        Block #{block.index_no}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {new Date(block.timestamp).toLocaleString()}
-                      </p>
+
+                    <div className="flex flex-col items-end gap-2 text-right">
+                      <span className="rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-200">
+                        ✅ Mined
+                      </span>
+                      <span className="text-xs uppercase tracking-[0.35em] text-white/50">Nonce: {block.nonce}</span>
                     </div>
                   </div>
-                  
-                  <div className="text-right">
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                      ✅ MINED
-                    </span>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Nonce: {block.nonce}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Hash Information */}
-                <div className="space-y-3 mb-4">
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs font-semibold text-gray-600 mb-1">Current Hash</p>
-                    <p className="font-mono text-sm text-green-700 break-all">
-                      {block.current_hash}
-                    </p>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <HashPanel label="Current Hash" value={block.current_hash} tone="emerald" />
+                    <HashPanel
+                      label="Previous Hash"
+                      value={
+                        block.previous_hash === '0'
+                          ? 'Genesis Block (No Previous Hash)'
+                          : block.previous_hash
+                      }
+                      tone="cyan"
+                    />
                   </div>
-                  
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs font-semibold text-gray-600 mb-1">Previous Hash</p>
-                    <p className="font-mono text-sm text-blue-700 break-all">
-                      {block.previous_hash === '0' ? (
-                        <span className="text-gray-500 italic">Genesis Block (No Previous Hash)</span>
-                      ) : (
-                        block.previous_hash
-                      )}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Transactions */}
-                <div className="border-t pt-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-gray-800">
-                      Transactions ({block.transactions?.length || 0})
-                    </h4>
-                  </div>
-                  
-                  {block.transactions && block.transactions.length > 0 ? (
-                    <div className="space-y-2">
-                      {block.transactions.map((tx) => (
-                        <div
-                          key={tx.id}
-                          className="bg-gray-50 p-3 rounded-lg border border-gray-200"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-sm">
-                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded font-mono text-xs">
-                                {tx.sender}
-                              </span>
-                              <span className="text-gray-400">→</span>
-                              <span className="px-2 py-1 bg-green-100 text-green-800 rounded font-mono text-xs">
-                                {tx.receiver}
+                  <div className="nebula-divider" />
+
+                  <div className="space-y-4">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/50">transactions</p>
+                        <h4 className="font-heading text-xl text-white md:text-2xl">
+                          Included ({block.transactions?.length || 0})
+                        </h4>
+                      </div>
+                      <span className="rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.35em] text-white/60">
+                        Hash Target ✦ 0000
+                      </span>
+                    </div>
+
+                    {block.transactions && block.transactions.length > 0 ? (
+                      <div className="space-y-3">
+                        {block.transactions.map((tx) => (
+                          <div
+                            key={tx.id}
+                            className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-nebula-magenta/40 hover:shadow-glow-sm"
+                          >
+                            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                              <div className="flex flex-col gap-2 text-sm text-white/80 md:flex-row md:items-center md:gap-4">
+                                <span className="rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-nebula-ice">
+                                  {tx.sender}
+                                </span>
+                                <span className="hidden text-white/40 md:block">⟶</span>
+                                <span className="rounded-full bg-white/10 px-3 py-1 font-mono text-xs text-nebula-ice">
+                                  {tx.receiver}
+                                </span>
+                              </div>
+                              <span className="text-lg font-heading text-nebula-ice">
+                                ${parseFloat(tx.amount).toFixed(2)}
                               </span>
                             </div>
-                            <span className="font-bold text-blockchain-blue">
-                              ${parseFloat(tx.amount).toFixed(2)}
-                            </span>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-500 italic">No transactions in this block</p>
-                  )}
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="rounded-2xl border border-dashed border-white/20 bg-white/5 px-5 py-6 text-sm text-white/60">
+                        No transactions in this block.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Chain Link Arrow */}
               {index < blocks.length - 1 && (
-                <div className="flex justify-center my-2">
-                  <div className="flex flex-col items-center">
-                    <div className="w-1 h-6 bg-blockchain-blue"></div>
-                    <div className="text-blockchain-blue text-2xl">⬇</div>
-                    <div className="w-1 h-6 bg-blockchain-blue"></div>
-                  </div>
+                <div className="flex justify-center" aria-hidden="true">
+                  <div className="h-24 w-px bg-gradient-to-b from-nebula-magenta via-white/20 to-nebula-purple" />
                 </div>
               )}
             </div>
@@ -178,3 +178,35 @@ function Blocks() {
 }
 
 export default Blocks;
+
+function StatPanel({ label, value, gradient }) {
+  return (
+    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-glow-sm">
+      <div
+        className="absolute inset-0 opacity-70"
+        style={{ background: gradient }}
+        aria-hidden="true"
+      />
+      <div className="relative z-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/60">{label}</p>
+        <p className="mt-4 font-heading text-4xl text-white">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function HashPanel({ label, value, tone }) {
+  const toneClasses = {
+    emerald: 'border-emerald-400/40 text-emerald-200',
+    cyan: 'border-nebula-cyan/40 text-nebula-ice',
+  };
+
+  return (
+    <div className={`rounded-2xl border bg-black/30 p-5 font-mono text-xs ${toneClasses[tone] || 'border-white/10 text-white/70'}`}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.45em] text-white/40">{label}</p>
+      <p className="mt-3 break-words text-[13px] leading-relaxed">
+        {value}
+      </p>
+    </div>
+  );
+}

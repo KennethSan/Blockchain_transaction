@@ -20,7 +20,8 @@ services:
             - blockchain_network
         command:
             - bash
-            - /var/www/html/docker-entrypoint.sh
+            - -c
+            - "sed -i 's/\r$//' /var/www/html/docker-entrypoint.sh && bash /var/www/html/docker-entrypoint.sh"
 
     postgres:
         image: postgres:15-alpine
@@ -50,7 +51,8 @@ services:
             - blockchain_network
         command:
             - sh
-            - /app/docker-entrypoint.sh
+            - -c
+            - "sed -i 's/\r$//' /app/docker-entrypoint.sh && sh /app/docker-entrypoint.sh"
 
 volumes:
     postgres_data:
