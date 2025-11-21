@@ -116,12 +116,10 @@ docker compose exec react npm run build
 
 ---
 
-## � Portfolio Usage
-Screenshots live under `docs/media/` so recruiters can preview the UI directly on GitHub. Replace the JPGs any time you capture fresh shots, then commit and push.
 
 ---
 
-## � Maintainer
+## Mailbox
 **Kenneth Santos**  
 Marikina City, NCR – Philippines  
 📧 skenneth695@gmail.com  
