@@ -1,249 +1,130 @@
-<<<<<<< HEAD
-# Blockchain_transaction
-=======
-# Blockchain Application with Laravel 12 & React
+# Nebula Chain – Blockchain Transaction Platform
 
-A simple blockchain application demonstrating proof-of-work mining, transaction management, and chain validation.
+A full-stack blockchain playground built with Laravel + PostgreSQL + React/Tailwind. Monitor blocks, craft transactions, and validate the chain in real time with a neon-inspired UI recreated in the screenshots below.
 
-## 🚀 Quick Start with Docker
+![Dashboard](docs/media/dashboard.jpg)
+![Transactions](docs/media/transactions.jpg)
+![Blocks Overview](docs/media/blocks-overview.jpg)
+![Blocks Detail](docs/media/blocks-detail.jpg)
 
-### Prerequisites
-- Docker Desktop installed and running
-- Git (optional)
+---
 
-### Installation Steps
+## ✨ Highlights
+- **End-to-end blockchain flow** – queue transactions, mine blocks with proof-of-work, and validate integrity.
+- **Cosmic UI kit** – gradient glassmorphism, motion cues, and responsive layouts showcased in the gallery above.
+- **Containerized workflow** – one `docker compose up -d` spins up Laravel, React, and PostgreSQL.
+- **Typed REST API** – predictable endpoints for mining, stats, and transaction queues.
+- **Production-ready structure** – separate entrypoints, `.env` templating, and database volumes.
 
-1. **Navigate to project directory:**
+---
+
+## 🧱 Architecture at a Glance
+| Layer | Tech | Notes |
+| --- | --- | --- |
+| Frontend | React 18 + Tailwind CSS | Animated dashboard/transactions/blocks views, consumes REST API. |
+| Backend | Laravel 10 (PHP 8.3) | Handles transaction lifecycles, mining logic, validation, and stats aggregation. |
+| Database | PostgreSQL 15 | Persists blocks, transactions, and pivot relationships. |
+| Orchestration | Docker Compose | Three services (`react`, `laravel`, `postgres`) wired via shared network. |
+
+---
+
+## 🚀 Quick Start (Docker)
 ```bash
 cd d:/block
+docker compose up -d
 ```
 
-2. **Start Docker containers:**
+Services booted:
+- **Frontend** – http://localhost:3001
+- **API** – http://localhost:8001 (REST) / http://localhost:8001/api
+- **PostgreSQL** – localhost:5433 (`blockchain_user` / `blockchain_pass`)
+
+Stop everything when finished:
 ```bash
-docker-compose up -d
-```
-
-This will start:
-- Laravel backend on `http://localhost:8000`
-- React frontend on `http://localhost:3000`
-- PostgreSQL database on `localhost:5432`
-
-3. **Install Laravel dependencies (first time only):**
-```bash
-docker exec -it blockchain_laravel bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-exit
-```
-
-4. **Install React dependencies (first time only):**
-```bash
-docker exec -it blockchain_react bash
-npm install
-exit
-```
-
-5. **Restart containers:**
-```bash
-docker-compose restart
-```
-
-6. **Access the application:**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000/api
-
----
-
-## 📋 Features
-
-### Backend (Laravel 12)
-- ✅ Transaction management (create, pending, mined)
-- ✅ Block mining with proof-of-work (hash must start with "00")
-- ✅ Blockchain validation (integrity check)
-- ✅ SHA256 hashing algorithm
-- ✅ PostgreSQL database
-- ✅ RESTful API endpoints
-
-### Frontend (React)
-- ✅ Dashboard with statistics and controls
-- ✅ Transaction creation form
-- ✅ Pending transactions list
-- ✅ Blockchain visualization
-- ✅ Real-time mining logs
-- ✅ Chain validation status
-- ✅ TailwindCSS styling
-
----
-
-## 🔌 API Endpoints
-
-### Transactions
-- `POST /api/transaction` - Create new transaction
-- `GET /api/transactions/pending` - Get pending transactions
-- `GET /api/transactions` - Get all transactions
-
-### Blockchain
-- `POST /api/block/mine` - Mine a new block
-- `GET /api/blocks` - Get all blocks
-- `GET /api/blockchain/validate` - Validate blockchain
-- `GET /api/blockchain/statistics` - Get blockchain stats
-
----
-
-## 📊 Database Schema
-
-### transactions
-- id, sender, receiver, amount, timestamp, status, created_at, updated_at
-
-### blocks
-- id, index_no, previous_hash, current_hash, nonce, timestamp, created_at, updated_at
-
-### block_transactions (pivot)
-- id, block_id, transaction_id, created_at, updated_at
-
----
-
-## 🎯 Sample Workflow
-
-1. **Create Transactions:**
-   - Go to "Transactions" page
-   - Fill in sender, receiver, amount
-   - Submit (status: pending)
-
-2. **Mine Block:**
-   - Go to "Dashboard"
-   - Click "Mine Block"
-   - System performs proof-of-work
-   - Block added to chain
-   - Transactions marked as "mined"
-
-3. **Validate Chain:**
-   - Click "Validate Chain"
-   - System checks all hashes and links
-   - Returns Valid/Invalid status
-
-4. **View Blockchain:**
-   - Go to "Blocks" page
-   - See visual representation of chain
-   - View transactions in each block
-
----
-
-## 🛠️ Docker Commands
-
-### View logs:
-```bash
-docker-compose logs -f
-```
-
-### Stop containers:
-```bash
-docker-compose down
-```
-
-### Rebuild containers:
-```bash
-docker-compose up -d --build
-```
-
-### Access Laravel container:
-```bash
-docker exec -it blockchain_laravel bash
-```
-
-### Access PostgreSQL:
-```bash
-docker exec -it blockchain_postgres psql -U blockchain_user -d blockchain
+docker compose down
 ```
 
 ---
 
-## 🔧 Development
+## 🧰 First-Time Setup
+Install dependencies the first time the containers are created:
 
-### Backend Development
 ```bash
-# Enter Laravel container
-docker exec -it blockchain_laravel bash
+# Laravel dependencies, env, and migrations
+docker compose exec laravel bash -lc "composer install && cp -n .env.example .env && php artisan key:generate && php artisan migrate"
 
-# Run migrations
-php artisan migrate
+# React dependencies
+docker compose exec react sh -c "npm install"
 
-# Clear cache
-php artisan cache:clear
-php artisan config:clear
+# Restart to pick up installs
+docker compose restart
+```
 
-# View routes
+---
+
+## 📊 Feature Tour
+- **Dashboard** – live stats (blocks, transactions, pending queue) plus quick actions for mining and validation.
+- **Transactions** – encode a transfer, monitor pending queues, and refresh the list.
+- **Blocks Explorer** – show hash metadata, nonces, included transactions, and hash target goals.
+- **Mining Engine** – proof-of-work (difficulty 2 leading zeros) with nonce tracking.
+- **Chain Validation** – one-click hash/previous-hash comparison to prove integrity.
+
+---
+
+## 🔌 Key API Endpoints
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/transaction` | Create a new pending transaction. |
+| GET | `/api/transactions/pending` | Inspect the queue awaiting inclusion. |
+| GET | `/api/transactions` | List every transaction with status. |
+| POST | `/api/block/mine` | Mine a block using transactions in the queue. |
+| GET | `/api/blocks` | Retrieve the blockchain with embedded transactions. |
+| GET | `/api/blockchain/statistics` | Aggregated metrics used by the dashboard. |
+| GET | `/api/blockchain/validate` | Returns `{ valid: true/false }` plus details. |
+
+---
+
+## 🛠️ CLI Cheatsheet
+```bash
+# Tail logs
+docker compose logs -f laravel
+docker compose logs -f react
+
+# Enter Laravel container for artisan work
+docker compose exec laravel bash
+
+# Access PostgreSQL shell
+docker compose exec postgres psql -U blockchain_user -d blockchain
+
+# Run artisan helpers
+php artisan migrate --force
 php artisan route:list
-```
 
-### Frontend Development
-```bash
-# Enter React container
-docker exec -it blockchain_react bash
-
-# Install new package
-npm install package-name
-
-# Build for production
-npm run build
+# Build frontend bundle
+docker compose exec react npm run build
 ```
 
 ---
 
-## 📝 Important Notes
-
-- **Mining Difficulty:** Set to 2 (hash must start with "00")
-- **Immutability:** Blocks cannot be edited once mined
-- **Validation:** Checks all hashes, links, and proof-of-work
-- **Genesis Block:** First block has previous_hash = "0"
-- **Auto-increment:** Block index automatically increments
-
----
-
-## 🚨 Troubleshooting
-
-### Port already in use:
-Edit `docker-compose.yml` and change port mappings
-
-### Database connection error:
-Ensure PostgreSQL container is running:
-```bash
-docker-compose ps
-```
-
-### Laravel dependencies not installed:
-```bash
-docker exec -it blockchain_laravel composer install
-```
-
-### React dependencies not installed:
-```bash
-docker exec -it blockchain_react npm install
-```
+## 🧯 Troubleshooting
+| Issue | Fix |
+| --- | --- |
+| Ports 3001/8001/5433 busy | Adjust the mappings in `docker-compose.yml` or free local ports. |
+| React shows network errors | Confirm Laravel container is running; `docker compose logs laravel`. |
+| Database connection refused | Make sure `postgres` container is healthy; restart the stack. |
+| Missing Composer/NPM deps | Re-run the first-time setup commands shown above. |
 
 ---
 
-## 📅 Project Timeline
-**Due Date:** October 24, 2025
-**Status:** Ready for development
+## � Portfolio Usage
+Screenshots live under `docs/media/` so recruiters can preview the UI directly on GitHub. Replace the JPGs any time you capture fresh shots, then commit and push.
 
 ---
 
-## 🎓 Learning Resources
-- Laravel Documentation: https://laravel.com/docs
-- React Documentation: https://react.dev
-- Blockchain Basics: Understanding proof-of-work and hashing
+## � Maintainer
+**Kenneth Santos**  
+Marikina City, NCR – Philippines  
+📧 skenneth695@gmail.com  
+📱 (+63) 977-238-0113
 
----
-
-## 📧 Support
-For issues or questions, check the logs:
-```bash
-docker-compose logs -f laravel
-docker-compose logs -f react
-```
-
-Happy coding! 🚀
->>>>>>> master
+Built alongside MannyTransfer and other portfolio pieces—happy to connect if you want a walkthrough. 🌌
